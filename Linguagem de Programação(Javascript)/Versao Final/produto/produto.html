@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <title>Gerenciamento de Produtos</title>
+</head>
+<body>
+    <div class="container">
+        <h1 class="mt-4">Gerenciamento de Produtos</h1>
+
+        <form id="product-form">
+            <input type="hidden" id="id_prod">
+            <div class="form-group">
+                <label for="nome_prod">Nome do Produto</label>
+                <input type="text" class="form-control" id="nome_prod" required>
+            </div>
+            <div class="form-group">
+                <label for="desc_prod">Descrição do Produto</label>
+                <textarea class="form-control" id="desc_prod"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="preco_prod">Preço do Produto</label>
+                <input type="text" class="form-control" id="preco_prod" required oninput="validatePriceInput(this)">
+            </div>
+            <div class="form-group">
+                <label for="categoria_prod">Categoria</label>
+                <select class="form-control" id="categoria_prod" required></select>
+            </div>
+            <div class="form-group">
+                <label for="estoque_prod">Estoque</label>
+                <input type="number" class="form-control" id="estoque_prod" required min="0">
+            </div>
+            <button type="submit" class="btn btn-primary">Salvar Produto</button>
+        </form>
+
+        <hr>
+
+        <h2 class="mt-4">Lista de Produtos</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>Descrição</th>
+                    <th>Preço</th>
+                    <th>Categoria</th>
+                    <th>Estoque</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody id="product-list"></tbody>
+        </table>
+    </div>
+
+    <script>
+        const apiUrl = 'http://localhost:3000';
+
+        function validatePriceInput(input) {
+            input.value = input.value.replace(/[^0-9.,]/g, ''); // Remove qualquer caractere que não seja número, ponto ou vírgula
+        }
+
+        function loadCategories() {
+            fetch(`${apiUrl}/categorias`)
+                .then(response => response.json())
+                .then(categories => {
+                    const categorySelect = document.getElementById('categoria_prod');
+                    categorySelect.innerHTML = '<option value="">Selecione uma categoria</option>';
+                    categories.forEach(category => {
+                        const option = document.createElement('option');
+                        option.value = category.id_categoria;
+                        option.textContent = category.nome_categoria;
+                        categorySelect.appendChild(option);
+                    });
+                })
+                .catch(error => console.error("Erro ao carregar categorias:", error));
+        }
+
+        function loadProducts() {
+            fetch(`${apiUrl}/produtos`)
+                .then(response => response.json())
+                .then(products => {
+                    const productList = document.getElementById('product-list');
+                    productList.innerHTML = '';
+                    products.forEach(product => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${product.id_prod}</td>
+                            <td>${product.nome_prod}</td>
+                            <td>${product.desc_prod}</td>
+                            <td>${product.preco_prod}</td>
+                            <td>${product.nome_categoria}</td>
+                            <td>${product.estoque_prod}</td>
+                            <td>
+                                <button onclick="editProduct(${product.id_prod})" class="btn btn-sm btn-warning">Editar</button>
+                                <button onclick="deleteProduct(${product.id_prod})" class="btn btn-sm btn-danger">Deletar</button>
+                            </td>
+                        `;
+                        productList.appendChild(row);
+                    });
+                })
+                .catch(error => console.error("Erro ao carregar produtos:", error));
+        }
+
+        document.getElementById('product-form').addEventListener('submit', function (event) {
+            event.preventDefault();
+            const id_prod = document.getElementById('id_prod').value;
+            const method = id_prod ? 'PUT' : 'POST';
+            const url = id_prod ? `${apiUrl}/produtos/${id_prod}` : `${apiUrl}/produtos`;
+
+            const newProduct = {
+                nome_prod: document.getElementById('nome_prod').value,
+                desc_prod: document.getElementById('desc_prod').value,
+                preco_prod: parseFloat(document.getElementById('preco_prod').value.replace(',', '.')),
+                categoria_prod: document.getElementById('categoria_prod').value,
+                estoque_prod: parseInt(document.getElementById('estoque_prod').value)
+            };
+
+            fetch(url, {
+                method: method,
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(newProduct)
+            })
+                .then(response => {
+                    if (!response.ok) throw new Error('Erro ao salvar o produto.');
+                    return response.json();
+                })
+                .then(() => {
+                    loadProducts();
+                    clearForm();
+                })
+                .catch(error => console.error(error));
+        });
+
+        function editProduct(id) {
+            fetch(`${apiUrl}/produtos/${id}`)
+                .then(response => response.json())
+                .then(product => {
+                    document.getElementById('id_prod').value = product.id_prod;
+                    document.getElementById('nome_prod').value = product.nome_prod;
+                    document.getElementById('desc_prod').value = product.desc_prod;
+                    document.getElementById('preco_prod').value = product.preco_prod;
+                    document.getElementById('categoria_prod').value = product.categoria_prod;
+                    document.getElementById('estoque_prod').value = product.estoque_prod;
+                    document.getElementById('id_prod').setAttribute('readonly', true); // Define o ID como readonly
+                })
+                .catch(error => console.error("Erro ao editar produto:", error));
+        }
+
+        function deleteProduct(id) {
+            if (confirm("Tem certeza que deseja deletar este produto?")) {
+                fetch(`${apiUrl}/produtos/${id}`, {
+                    method: 'DELETE'
+                })
+                    .then(response => {
+                        if (!response.ok) throw new Error('Erro ao deletar o produto.');
+                        loadProducts();
+                    })
+                    .catch(error => console.error(error));
+            }
+        }
+
+        function clearForm() {
+            document.getElementById('product-form').reset();
+            document.getElementById('id_prod').value = '';
+            document.getElementById('id_prod').removeAttribute('readonly'); // Remove o readonly ao limpar
+        }
+
+        // Carregar categorias e produtos ao iniciar
+        loadCategories();
+        loadProducts();
+    </script>
+</body>
+</html>

@@ -1,0 +1,2 @@
+Dificuldades ex2 - entender as estruturas das funções, vi a fundo a teoria mas foi a primeira vez na pratica, e a pratica de guardar o valor de uma função passando um argumento dentro de uma variável é algo que não me acostumei a pensar ainda.
+

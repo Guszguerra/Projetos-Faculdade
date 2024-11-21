@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+
+        //Apresenta o total da soma dos 100 primeiros numeros
+        //Primeiro somar todos os numeros enquanto for menor ou igual à 100
+        //Depois
+        let soma = 0;
+        let msg= ""
+
+        for(i=0;i<=100;i++){
+            if(i >= 0 && i<=100){
+                soma = (i * (i + 1)) / 2;
+            }
+        }
+
+        msg = `A soma dos 100 primeiros números é: ${soma}`; 
+        alert(msg);
+    </script>
+</body>
+</html>

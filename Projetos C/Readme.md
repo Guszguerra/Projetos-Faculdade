@@ -1,0 +1,1 @@
+Esta pasta contém projetos desenvolvidos por mim na linguagem C.

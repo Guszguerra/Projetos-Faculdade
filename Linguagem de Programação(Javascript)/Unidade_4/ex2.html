@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<title>Gerenciador de Contatos</title>
+</head>
+<body>
+    <h2>Gerenciador de Contatos</h2>
+    <table id="tabelaContatos" border="1">
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Email</th>
+                <th>Telefone</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Linhas da tabela serão adicionadas por JavaScript -->
+        </tbody>
+    </table>
+    <button onclick="adicionarContato('Novo', 'novo@email.com', '999-888-777')">Adicionar Contato</button>
+    <script>
+      // Array pré-estabelecido de contatos
+      const contatos = [
+          { nome: "João", email: "joao@email.com", telefone: "123-456-789" },
+          { nome: "Maria", email: "maria@email.com", telefone: "987-654-321" }
+      ];
+      
+      // Função para inicializar a tabela com os contatos existentes
+      window.onload = function() {
+          contatos.forEach(contato => adicionarLinha(contato.nome, contato.email, contato.telefone));
+      };
+      
+      function adicionarLinha(nome, email, telefone) {
+          const tabela = document.getElementById('tabelaContatos').getElementsByTagName('tbody')[0];
+          const novaLinha = tabela.insertRow();
+          novaLinha.innerHTML = `<td>${nome}</td><td>${email}</td><td>${telefone}</td>
+              <td>
+                  <button onclick="editarContato(this)">Editar</button>
+                  <button onclick="excluirContato(this)">Excluir</button>
+              </td>`;
+      }
+      
+      function editarContato(btn) {
+          const linha = btn.parentNode.parentNode;
+          const celulas = linha.getElementsByTagName('td');
+          if (btn.textContent === 'Editar') {
+              for (let i = 0; i < celulas.length - 1; i++) {
+                  let valor = celulas[i].innerText;
+                  celulas[i].innerHTML = `<input type='text' value='${valor}' />`;
+              }
+              btn.textContent = 'Salvar';
+          } else {
+              for (let i = 0; i < celulas.length - 1; i++) {
+                  let valor = celulas[i].getElementsByTagName('input')[0].value;
+                  celulas[i].innerText = valor;
+              }
+              btn.textContent = 'Editar';
+          }
+      }
+      
+      function excluirContato(btn) {
+          const linha = btn.parentNode.parentNode;
+          linha.parentNode.removeChild(linha);
+      }
+      </script>
+</body>
+</html>

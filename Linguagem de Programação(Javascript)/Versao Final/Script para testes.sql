@@ -1,0 +1,4 @@
+CREATE DATABASE IF NOT EXISTS mercado;
+USE mercado;
+
+SELECT * FROM pedido;

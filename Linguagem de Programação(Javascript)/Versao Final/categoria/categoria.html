@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gerenciamento de Categorias</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+</head>
+<body class="container mt-5">
+  <h2>Gerenciamento de Categorias</h2>
+  <form id="categoryForm" class="my-4">
+    <div class="form-group">
+      <input
+        type="number"
+        id="id_categoria"
+        class="form-control"
+        placeholder="ID da Categoria"
+        min="1"
+        required
+        disabled
+      />
+    </div>
+    <div class="form-group">
+      <input type="text" id="nome_categoria" class="form-control" placeholder="Nome da Categoria" required
+             oninput="this.value = this.value.replace(/[^a-zA-Z\s]/g, '')" />
+    </div>
+    <div class="form-group">
+      <textarea id="descricao_categoria" class="form-control" placeholder="Descrição da Categoria" rows="3" required></textarea>
+    </div>
+    <div class="form-group">
+      <select id="status_categoria" class="form-control">
+        <option value="ativo">Ativo</option>
+        <option value="inativo">Inativo</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <input type="number" id="prioridade_categoria" class="form-control" placeholder="Prioridade" min="0" max="5" required />
+    </div>
+    <button type="submit" class="btn btn-primary">Cadastrar Categoria</button>
+    <button type="button" id="cancelBtn" class="btn btn-secondary" style="display: none">Cancelar</button>
+  </form>
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nome</th>
+        <th>Descrição</th>
+        <th>Status</th>
+        <th>Prioridade</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody id="categoriesTable"></tbody>
+  </table>
+
+  <script>
+    let categorias = [];
+    let categoriaAtual = null;
+
+    function displayCategories() {
+      const tbody = document.getElementById("categoriesTable");
+      tbody.innerHTML = "";
+      categorias.forEach((categoria) => {
+        const row = document.createElement("tr");
+        row.innerHTML =
+          ` 
+          <td>${categoria.id_categoria}</td>
+          <td>${categoria.nome_categoria}</td>
+          <td>${categoria.descricao_categoria || ""}</td>
+          <td>${categoria.status_categoria}</td>
+          <td>${categoria.prioridade_categoria}</td>
+          <td>
+            <button class="btn btn-warning btn-sm" onclick="editCategory(${categoria.id_categoria})">Alterar</button>
+            <button class="btn btn-danger btn-sm" onclick="deleteCategory(${categoria.id_categoria})">Remover</button>
+          </td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+
+    function editCategory(id) {
+      categoriaAtual = id;
+      const categoria = categorias.find((c) => c.id_categoria === id);
+      document.getElementById("id_categoria").value = categoria.id_categoria;
+      document.getElementById("nome_categoria").value = categoria.nome_categoria;
+      document.getElementById("descricao_categoria").value = categoria.descricao_categoria;
+      document.getElementById("status_categoria").value = categoria.status_categoria;
+      document.getElementById("prioridade_categoria").value = categoria.prioridade_categoria;
+      document.getElementById("cancelBtn").style.display = "inline-block";
+    }
+
+    function deleteCategory(id) {
+      fetch("http://localhost:3000/categorias/" + id, {
+        method: "DELETE",
+      })
+        .then(() => {
+          categorias = categorias.filter((c) => c.id_categoria !== id);
+          displayCategories();
+        })
+        .catch((error) => console.error("Error:", error));
+    }
+
+    document.getElementById("categoryForm").addEventListener("submit", function (event) {
+      event.preventDefault(); // Impede o envio do formulário
+
+      // Coleta os dados do formulário
+      const id_categoria = document.getElementById("id_categoria").value;
+      const nome_categoria = document.getElementById("nome_categoria").value;
+      const descricao_categoria = document.getElementById("descricao_categoria").value;
+      const status_categoria = document.getElementById("status_categoria").value;
+      const prioridade_categoria = document.getElementById("prioridade_categoria").value;
+
+      // Verifica se estamos editando ou criando uma nova categoria
+      const url = categoriaAtual ? "http://localhost:3000/categorias/" + categoriaAtual : "http://localhost:3000/categorias";
+      const method = categoriaAtual ? "PUT" : "POST";
+
+      const categoriaData = {
+        nome_categoria,
+        descricao_categoria,
+        status_categoria,
+        prioridade_categoria,
+      };
+
+      // Envia os dados do formulário para o servidor
+      fetch(url, {
+        method: method,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(categoriaData),
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Erro ao cadastrar/atualizar a categoria");
+          }
+          return response.json();
+        })
+        .then((data) => {
+          if (!categoriaAtual) {
+            categorias.push(data); // Adiciona a nova categoria à lista
+          } else {
+            const index = categorias.findIndex((c) => c.id_categoria === categoriaAtual);
+            categorias[index] = data; // Atualiza a categoria existente
+            categoriaAtual = null; // Limpa a variável para o próximo cadastro
+          }
+          resetForm(); // Reseta o formulário após a operação
+          displayCategories(); // Atualiza a tabela de categorias
+        })
+        .catch((error) => console.error("Error:", error));
+    });
+
+    function resetForm() {
+      document.getElementById("id_categoria").value = ""; // Limpa o campo de ID
+      document.getElementById("nome_categoria").value = ""; // Limpa o campo de nome
+      document.getElementById("descricao_categoria").value = ""; // Limpa o campo de descrição
+      document.getElementById("status_categoria").value = "ativo"; // Reseta o status para 'ativo'
+      document.getElementById("prioridade_categoria").value = ""; // Limpa o campo de prioridade
+      document.getElementById("cancelBtn").style.display = "none"; // Esconde o botão de cancelar
+    }
+
+    document.getElementById("cancelBtn").addEventListener("click", resetForm); // Reseta o formulário ao clicar em cancelar
+
+    // Função para carregar as categorias ao iniciar a página
+    function loadCategories() {
+      fetch("http://localhost:3000/categorias")
+        .then((response) => response.json())
+        .then((data) => {
+          categorias = data; // Armazena as categorias recebidas
+          displayCategories(); // Exibe as categorias na tabela
+        })
+        .catch((error) => console.error("Error:", error));
+    }
+
+    // Carrega as categorias quando a página é carregada
+    loadCategories();
+  </script>
+</body>
+</html>

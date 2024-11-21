@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <title>Hora Atual</title>
+    <script>
+        // Função para atualizar a hora
+        function atualizarHora() {
+            var agora = new Date(); // Pega a data e hora atual
+            var hora = agora.getHours(); // Pega as horas
+            var minuto = agora.getMinutes(); // Pega os minutos
+            var segundo = agora.getSeconds(); // Pega os segundos
+            hora = hora < 10 ? '0' + hora : hora;
+            minuto = minuto < 10 ? '0' + minuto : minuto;
+            segundo = segundo < 10 ? '0' + segundo : segundo;
+            document.getElementById('hora').innerHTML = hora + ':' + minuto + ':' + segundo;
+        }
+
+        // Chama a função atualizarHora a cada 1000 milissegundos (1 segundo)
+        setInterval(atualizarHora, 1000);
+    </script>
+</head>
+<body onload="atualizarHora();">
+    <h1>Hora Atual</h1>
+    <div id="hora"></div> <!-- Div onde a hora será exibida -->
+</body>
+</html>

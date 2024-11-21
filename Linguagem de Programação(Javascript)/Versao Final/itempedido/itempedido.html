@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Item do Pedido</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Gerenciamento de Itens do Pedido</h2>
+        
+        <form id="itemPedidoForm">
+            <div class="form-group">
+                <label for="id_pedido">ID Pedido</label>
+                <select class="form-control" id="id_pedido" name="id_pedido" required>
+                    <option value="">Selecione um Pedido</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="id_produto">ID Produto</label>
+                <select class="form-control" id="id_produto" name="id_produto" required>
+                    <option value="">Selecione um Produto</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="quantidade_produto">Quantidade</label>
+                <input type="number" class="form-control" id="quantidade_produto" name="quantidade_produto" required>
+            </div>
+            <div class="form-group">
+                <label for="precoUni_produto">Preço Unitário</label>
+                <input type="number" step="0.01" class="form-control" id="precoUni_produto" name="precoUni_produto" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Salvar</button>
+        </form>
+
+        <h3 class="mt-4">Itens do Pedido</h3>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ID Item</th>
+                    <th>ID Pedido</th>
+                    <th>ID Produto</th>
+                    <th>Quantidade</th>
+                    <th>Preço Unitário</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody id="itemPedidoTableBody">
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        var form = document.getElementById('itemPedidoForm');
+        var itemPedidoTableBody = document.getElementById('itemPedidoTableBody');
+        var isEditing = false; 
+        var editingItemId = null; 
+
+        function loadPedidoOptions() {
+            fetch('http://localhost:3000/pedidos')
+                .then(response => response.json())
+                .then(pedidos => {
+                    var idPedidoSelect = document.getElementById('id_pedido');
+                    pedidos.forEach(pedido => {
+                        var option = document.createElement('option');
+                        option.value = pedido.id_pedido;
+                        option.textContent = `Pedido ${pedido.id_pedido}`;
+                        idPedidoSelect.appendChild(option);
+                    });
+                });
+        }
+
+        function loadProdutoOptions() {
+            fetch('http://localhost:3000/produtos')
+                .then(response => response.json())
+                .then(produtos => {
+                    var idProdutoSelect = document.getElementById('id_produto');
+                    produtos.forEach(produto => {
+                        var option = document.createElement('option');
+                        option.value = produto.id_prod;
+                        option.textContent = produto.nome_prod; 
+                        idProdutoSelect.appendChild(option);
+                    });
+                });
+        }
+
+        function loadItems() {
+            fetch('http://localhost:3000/itenspedido')
+                .then(response => {
+                    if (!response.ok) throw new Error("Erro ao carregar itens.");
+                    return response.json();
+                })
+                .then(itens => {
+                    itemPedidoTableBody.innerHTML = '';
+                    itens.forEach(item => {
+                        var row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${item.id_item}</td>
+                            <td>${item.id_pedido}</td>
+                            <td>${item.id_produto}</td>
+                            <td>${item.quantidade}</td>
+                            <td>${item.preco_unitario}</td>
+                            <td>
+                                <button class="btn btn-primary btn-sm" onclick="editItem(${item.id_item})">Editar</button>
+                                <button class="btn btn-danger btn-sm" onclick="deleteItem(${item.id_item})">Excluir</button>
+                            </td>
+                        `;
+                        itemPedidoTableBody.appendChild(row);
+                    });
+                })
+                .catch(error => console.error(error));
+        }
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            var formData = new FormData(form);
+            var data = {
+                id_pedido: formData.get('id_pedido'),
+                id_produto: formData.get('id_produto'),
+                quantidade_produto: +formData.get('quantidade_produto'),
+                precoUni_produto: +formData.get('precoUni_produto')
+            };
+
+            var url = isEditing ? `http://localhost:3000/itenspedido/${editingItemId}` : 'http://localhost:3000/itenspedido';
+            var method = isEditing ? 'PUT' : 'POST';
+
+            fetch(url, {
+                method: method,
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            })
+            .then(response => {
+                if (!response.ok) throw new Error("Erro ao salvar item.");
+                return response.json();
+            })
+            .then(() => {
+                loadItems();
+                form.reset();
+                isEditing = false;
+                editingItemId = null;
+            })
+            .catch(error => console.error(error));
+        });
+
+        function editItem(id) {
+            fetch(`http://localhost:3000/itenspedido/${id}`)
+                .then(response => response.json())
+                .then(item => {
+                    document.getElementById('id_pedido').value = item.id_pedido;
+                    document.getElementById('id_produto').value = item.id_produto;
+                    document.getElementById('quantidade_produto').value = item.quantidade_produto;
+                    document.getElementById('precoUni_produto').value = item.precoUni_produto;
+                    isEditing = true;
+                    editingItemId = id;
+                })
+                .catch(error => console.error(error));
+        }
+
+        function deleteItem(id) {
+            fetch(`http://localhost:3000/itenspedido/${id}`, { method: 'DELETE' })
+                .then(response => {
+                    if (!response.ok) throw new Error("Erro ao excluir item.");
+                    loadItems();
+                })
+                .catch(error => console.error(error));
+        }
+
+        loadPedidoOptions();
+        loadProdutoOptions();
+        loadItems();
+    </script>
+</body>
+</html>

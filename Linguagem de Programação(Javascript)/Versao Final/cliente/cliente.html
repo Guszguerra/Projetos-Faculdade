@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gerenciamento de Clientes</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+</head>
+<body class="container mt-5">
+  <h2>Gerenciamento de Clientes</h2>
+  <form id="clientForm" class="my-4">
+    <div class="form-group">
+      <input type="text" id="cpf_cli" class="form-control" placeholder="CPF (somente números)" maxlength="11" required oninput="this.value = this.value.replace(/[^0-9]/g, '')" />
+    </div>
+    <div class="form-group">
+      <input type="text" id="nome_cli" class="form-control" placeholder="Nome" required />
+    </div>
+    <div class="form-group">
+      <input type="text" id="endereco_cli" class="form-control" placeholder="Endereço" required />
+    </div>
+    <div class="form-group">
+      <input type="text" id="telefone_cli" class="form-control" placeholder="Telefone" required oninput="this.value = this.value.replace(/[^0-9]/g, '')" />
+    </div>
+    <div class="form-group">
+      <input type="email" id="email_cli" class="form-control" placeholder="Email" required />
+    </div>
+    <div class="form-group">
+      <input type="text" id="cidade_cli" class="form-control" placeholder="Cidade" required />
+    </div>
+    <button type="submit" class="btn btn-primary">Cadastrar Cliente</button>
+    <button type="button" id="cancelBtn" class="btn btn-secondary" style="display: none">Cancelar</button>
+  </form>
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>CPF</th>
+        <th>Nome</th>
+        <th>Endereço</th>
+        <th>Telefone</th>
+        <th>Email</th>
+        <th>Cidade</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody id="clientsTable"></tbody>
+  </table>
+
+  <script>
+    let clients = [];
+    let currentClient = null;
+
+    function displayClients() {
+      const tbody = document.getElementById("clientsTable");
+      tbody.innerHTML = "";
+      clients.forEach((client) => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${client.cpf_cli}</td>
+          <td>${client.nome_cli}</td>
+          <td>${client.endereco_cli}</td>
+          <td>${client.telefone_cli}</td>
+          <td>${client.email_cli}</td>
+          <td>${client.cidade_cli}</td>
+          <td>
+            <button class="btn btn-warning btn-sm" onclick="editClient('${client.cpf_cli}')">Alterar</button>
+            <button class="btn btn-danger btn-sm" onclick="deleteClient('${client.cpf_cli}')">Remover</button>
+          </td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+
+    function editClient(cpf) {
+      currentClient = cpf;
+      const client = clients.find((c) => c.cpf_cli === cpf);
+      document.getElementById("cpf_cli").value = client.cpf_cli;
+      document.getElementById("cpf_cli").setAttribute("readonly", true); // Torna o CPF somente leitura
+      document.getElementById("nome_cli").value = client.nome_cli;
+      document.getElementById("endereco_cli").value = client.endereco_cli;
+      document.getElementById("telefone_cli").value = client.telefone_cli;
+      document.getElementById("email_cli").value = client.email_cli;
+      document.getElementById("cidade_cli").value = client.cidade_cli;
+      document.getElementById("cancelBtn").style.display = "inline-block";
+    }
+
+    function deleteClient(cpf) {
+      fetch(`http://localhost:3000/clientes/${cpf}`, {
+        method: "DELETE",
+      })
+        .then(() => {
+          clients = clients.filter((c) => c.cpf_cli !== cpf);
+          displayClients();
+        })
+        .catch((error) => console.error("Error:", error));
+    }
+
+    document.getElementById("clientForm").addEventListener("submit", function (event) {
+        event.preventDefault(); // Impede o envio padrão do formulário
+      const clientData = {
+        cpf_cli: document.getElementById("cpf_cli").value,
+        nome_cli: document.getElementById("nome_cli").value,
+        endereco_cli: document.getElementById("endereco_cli").value,
+        telefone_cli: document.getElementById("telefone_cli").value,
+        email_cli: document.getElementById("email_cli").value,
+        cidade_cli: document.getElementById("cidade_cli").value,
+      };
+
+      const method = currentClient ? "PUT" : "POST"; // Define o método de requisição
+      const url = currentClient ? `http://localhost:3000/clientes/${currentClient}` : `http://localhost:3000/clientes`;
+
+      fetch(url, {
+        method: method,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(clientData),
+      })
+        .then((response) => {
+          if (!response.ok) throw new Error("Erro ao cadastrar/atualizar cliente.");
+          return response.json();
+        })
+        .then((data) => {
+          if (currentClient) {
+            clients = clients.map((c) => (c.cpf_cli === currentClient ? data : c));
+            currentClient = null;
+          } else {
+            clients.push(data);
+          }
+          resetForm();
+          displayClients();
+        })
+        .catch((error) => console.error("Error:", error));
+    });
+
+    function resetForm() {
+      document.getElementById("clientForm").reset();
+      document.getElementById("cpf_cli").removeAttribute("readonly"); // Remove a restrição de somente leitura
+      document.getElementById("cancelBtn").style.display = "none"; // Esconde o botão de cancelar
+    }
+
+    document.getElementById("cancelBtn").addEventListener("click", resetForm);
+
+    // Função para buscar e exibir os clientes ao carregar a página
+    function fetchClients() {
+      fetch("http://localhost:3000/clientes")
+        .then((response) => response.json())
+        .then((data) => {
+          clients = data;
+          displayClients();
+        })
+        .catch((error) => console.error("Error:", error));
+    }
+
+    // Carregar os clientes ao iniciar
+    window.onload = fetchClients;
+  </script>
+</body>
+</html>

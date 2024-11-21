@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        //Recebe três inteiros
+        //Mostra qual é o maior e qual é o menor 
+        let n1 = Number(prompt("Digite o primeiro número:"));
+        let n2 = Number(prompt("Digite o segundo número:"));
+        let n3 = Number(prompt("Digite o terceiro número:"));
+
+        if (n1 > n2 && n1 > n3){
+            alert(`O número ${n1} é o maior.`);
+            if(n2 < n3){
+                alert(`O número ${n2} é o menor.`);
+            }
+            else{
+                alert(`O número ${n3} é o menor.`);
+            }
+        }
+        else if(n1 < n2 && n1 < n3){
+            alert(`O número ${n1} é o menor.`);
+            if(n2 > n3){
+                alert(`O número ${n2} é o maior.`);
+            }
+            else{
+                alert(`O número ${n3} é o maior.`);
+            }
+        }
+        else if(n2 > n1 && n2 > n3){
+            alert(`O número ${n2} é o maior.`);
+            if(n1 > n3){
+                alert(`O número ${n3} é o menor.`);
+            }
+            else{
+                alert(`O número ${n1} é o menor.`);
+            }
+        }
+        else if(n2 < n1 && n2 < n3){
+            alert(`O número ${n2} é o menor.`);
+            if(n1 > n3){
+                alert(`O número ${n1} é o maior.`);
+            }
+            else{
+                alert(`O número ${n3} é o maior.`);
+            }
+        }
+        else if(n3 > n1 && n3 < n2){
+            alert(`O número ${n3} é o maior.`);
+            if(n2 > n1){
+                alert(`O número ${n1} é o menor.`);
+            }
+            else{
+                alert(`O número ${n2} é o menor.`);
+            }
+        }
+        else{
+            alert(`O número ${n3} é o menor.`);
+            if(n2 > n1){
+                alert(`O número ${n2} é o maior.`);
+            }
+            else{
+                alert(`O número ${n1} é o maior.`);
+            }
+        }
+    </script>
+</body>
+</html>
