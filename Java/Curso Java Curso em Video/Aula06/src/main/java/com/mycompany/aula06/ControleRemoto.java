@@ -52,25 +52,34 @@ public class ControleRemoto implements Controlador{
 
     @Override
     public void abrirMenu() {
-        System.out.println("Está ligado? " + this.getLigado());
-        System.out.println("Esta tocando? " + this.getTocando());
-        System.out.print("Volume: " + this.getVolume());
-        
-        for(int i=0; i <= this.getVolume(); i+=10){
-            System.out.println("|");
+        if (!(this.getLigado())){
+            System.out.println("Impossivel abrir Menu.");
         }
-        
+        else {
+            System.out.println("----- MENU -----");
+            System.out.println("Esta ligado? " + this.getLigado());
+            System.out.println("Esta tocando? " + this.getTocando());
+            System.out.print("Volume: " + this.getVolume());
+
+            for(int i=0; i <= this.getVolume(); i+=10){
+                System.out.print("|");
+            }
+        }
+   
     }
 
     @Override
     public void fecharMenu() {
-        System.out.println("Fechando menu.....");
+        System.out.printf("\nFechando menu.....");
     }
 
     @Override
     public void maisVolume() {
         if(this.getLigado()){
             this.setVolume(this.getVolume() + 5);
+        }
+        else{
+            System.out.println("Impossivel aumentar volume.");
         }
     }
 
@@ -79,11 +88,15 @@ public class ControleRemoto implements Controlador{
         if(this.getLigado()){
             this.setVolume(this.getVolume() - 5);
         }
+        else{
+            System.out.println("Impossivel diminuir volume.");
+        }
     }
 
     @Override
     public void ligarMudo() {
         if(this.getLigado()&& this.getVolume() > 0){
+            System.out.println("Modo mudo ligado.");
             this.setVolume(0);
         }
     }
@@ -100,12 +113,18 @@ public class ControleRemoto implements Controlador{
         if(this.getLigado() && !(this.getTocando())){
             this.setTocando(true);
         }
+        else{
+            System.out.println("Impossivel dar play.");
+        }
     }
 
     @Override
     public void pause() {
         if(this.getLigado() && this.getTocando()){
             this.setTocando(false);
+        }
+        else{
+            System.out.println("Impossivel pausar.");
         }
     }
     
