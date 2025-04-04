@@ -1,0 +1,25 @@
+//Escreva uma função que recebe um array de inteiros e seu tamanho e retorna o menor número inteiro dentre os elementos. Assuma que o array tem pelo menos um elemento.
+
+#include <stdio.h>
+
+void funcao(int array[], int tamanho);
+
+int main(){
+  int a[] = {5, 4, 2, 9, 8, 32};
+  int tamanho = sizeof(a) / sizeof(a[0]);
+
+  menor(a, tamanho);
+}
+
+int menor(int array[], int t){
+  int i = 0;
+  int menor = 0;
+  for(i=0;i<t;i++){
+    if(a[i] > menor){
+        a[i] += menor;
+    }
+  }
+
+  return menor[0];
+
+}
