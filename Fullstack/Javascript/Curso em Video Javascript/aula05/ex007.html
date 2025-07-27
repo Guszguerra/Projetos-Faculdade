@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body{
+            font: normal 20pt Arial;
+        }
+        input{
+            font: normal 18pt Arial;
+            width:100px;
+        }
+        p#Somamostrada{
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Somando valores</h1>
+    <p>
+        <label><strong>Numero 1:</strong> <input type="number" name="txtn1" id="txtn1"></label> +
+        <label><strong></strong> <input type="number" name="txtn2" id="txtn2"></label>
+        &nbsp;
+        &nbsp;
+        <input type="button" value="Somar" onclick="somar()">
+    </p>
+    <p id="Somamostrada"></p>
+    <script>
+        function somar(){
+           let texton1 = document.getElementById('txtn1');
+           let texton2 = document.getElementById('txtn2');
+           let numero1 = Number(txtn1.value); 
+           let numero2 = Number(txtn2.value);
+           let resposta = document.getElementById('Somamostrada');
+    
+           let soma = numero1 + numero2;
+           resposta.innerHTML = (`A soma dos números: ${numero1} + ${numero2} = <strong>${soma}</strong>.`);
+        }
+
+
+
+
+    </script>
+</body>
+</html>

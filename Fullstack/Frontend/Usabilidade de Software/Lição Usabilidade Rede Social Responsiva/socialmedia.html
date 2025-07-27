@@ -1,0 +1,723 @@
+    <!DOCTYPE html>
+    <html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="./cores.css">
+
+
+        <title>Minha Rede Social</title>
+        <style>
+            /* Reset de estilos */
+            body, h1, p, ul, ol, li, a, img, section, div, header, nav, footer {
+                margin: 0;
+                padding: 0;
+                border: 0;
+                font-size: 100%;
+                font: inherit;
+                vertical-align: baseline;
+            }
+        
+            /* Estilos para elementos */
+            body {
+                font-family: Arial, sans-serif;
+                line-height: 1.6;
+                background-color: #2B2D42;
+            }
+
+            header {
+                border-bottom: solid 3px #D90429;
+                border-bottom-left-radius: 15px;
+                border-bottom-right-radius: 15px;
+                color: #fff;
+                background-color: #09111f;
+                text-align: center;
+                font-weight: bold;
+            /* margin-right: 100px;
+                margin-left: 100px; */
+                margin-bottom: 100px; 
+            }
+
+            h1, nav{
+                padding-top: 1%;
+            }
+
+            h1{
+                padding-top: 40px;
+            }
+
+            .barraVermelha {
+                border: none; /* Remove a borda padrão da linha */
+                background-color: #D90429; /* Altera a cor de fundo da linha */
+                height: 2.5px;
+                padding-top: 0.05%;
+                padding-left: 20px;
+            }
+
+            nav ul {
+                list-style-type: none;
+                text-align: center;
+                margin-bottom: 20px;
+            }
+
+            nav ul li {
+                display: inline;
+                margin-right: 10px;
+            }
+
+            main {
+                padding: 20px;
+                max-width: 800px;
+                margin: 0 auto;
+                color: #D90429;
+            }
+
+            section {
+                margin-bottom: 20px;
+            }
+
+            footer {
+                color: #D90429;
+                text-align: center;
+                padding: 20px;
+            }
+
+            section{
+                border: solid 3px #D90429;
+                background-color: #09111f;
+                padding: 50px;
+            }
+
+            h2,h3{
+                color: #ec4a4a;
+                border: solid 3px #D90429;
+                background-color: #100014;
+                border-radius: 15px;
+                padding-left: 10px;
+            }
+
+            .fa-solid {
+                font-size: 23px;
+                color: #ec4a4a;
+            }
+
+            .icone {
+                text-indent: 15px;
+                letter-spacing: 25px;
+            }
+
+            h1{
+                padding-bottom: 20px;
+                font-size: 30px;
+                color: #ec4a4a;
+            }
+
+            li{
+                color:#ec4a4a;
+            }
+
+            .personagem{
+                padding-top: 15px;
+                list-style: none;
+                display: flex;
+                margin-left: 0px;
+                margin-right: 13px;
+            }
+
+            .personagem img {
+                margin-right: 100px; /* Adiciona espaço à direita da imagem */
+            }
+
+            a {
+                text-decoration: none;
+                font-style: italic;
+                color: #D90429;
+            }
+
+            .iconeRedes {
+                list-style-type: none;
+                padding-right: 150px;
+                font-size: 25px;
+                margin: 10px;
+            }
+
+            .deLado{
+                list-style: none;
+                display: flex;
+                align-items: center;
+            }
+
+            .deLado2{
+                display:flex;
+                padding-right: 6px;
+            }
+
+            .redeSocial{
+                text-decoration:underline;
+                font-style: normal;
+                font-size: 20px;
+                font-family:Arial, Helvetica, sans-serif;
+            }
+
+            .imagemConteudo{
+                border: solid 3px #770000;
+            }
+            
+            .textoConteudo{
+                font-size: medium;
+                font-weight: bold;
+                font-family: Arial, Helvetica, sans-serif;
+                color: #770000;
+            }
+
+            img {
+            width: 100%;
+                height: auto;
+            }
+
+            .painel-lateral {
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            width: 250px;
+            background-color: #09111f;
+            color: #D90429;
+            overflow-y: auto;
+            transition: transform 0.3s ease;
+        }
+
+        .painel-lateral h2 {
+            text-align: center;
+            margin-top: 20px;
+            cursor: pointer;
+        }
+
+        .painel-lateral ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        .painel-lateral li {
+            margin-bottom: 10px;
+            padding: 5px;
+            border-bottom: 1px solid #D90429;
+            cursor: pointer;
+        }
+
+        .painel-lateral li:last-child {
+            border-bottom: none;
+        }
+
+        .painel-lateral .sugestao {
+            font-style: italic;
+            color: #777;
+        }
+
+        .painel-lateral.escondido {
+            transform: translateX(-100%);
+        }
+
+        /* Estilos específicos para cada painel */
+        #amigos-panel {
+            left: 0;
+        }
+
+        #comunidades-panel {
+            right: 0;
+        }
+
+        #mensagens-panel {
+            bottom: 0;
+            height: 200px; /* Altura inicial */
+            transform: translateY(100%);
+            overflow-y: auto;
+            padding: 10px;
+        }
+
+        #mensagens-panel .escrever-mensagem {
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        #mensagens-panel .escrever-mensagem button {
+            background-color: #D90429;
+            color: #fff;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+
+        #mensagens-panel.escondido {
+            transform: translateY(100%);
+        }
+
+            /* Estilos para responsividade */
+        @media (max-width: 556px) {
+        /* Uma imagem por faixa na horizontal (modo retrato de celular) */
+        .personagem li {
+            width: 100%; /* Ocupa toda a largura da tela */
+            margin-bottom: 20px; /* Espaço entre as imagens */
+            text-align: center; /* Centraliza o conteúdo */
+            
+        }
+        .personagem li:nth-child(1) img,
+        .personagem li:nth-child(2) img {
+        max-width: 100%; /* Largura máxima igual à largura do container */
+        height: auto; /* Mantém a proporção da imagem */
+        }
+        .personagem img:hover {
+        width: 45vw !important; /* Largura de 45vw no modo paisagem */
+        height: auto !important; /* Mantém a proporção da imagem */
+        max-width: 85vw !important; /* Largura máxima de 85vw no modo retrato */
+        z-index: 1; /* Posiciona a imagem na frente das outras */
+        position: relative; /* Permite posicionamento relativo */
+        cursor: pointer; /* Exibe o cursor como mão ao passar o mouse */
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Sombra para destacar a imagem */
+        }
+
+        .personagem img {
+            max-width: calc(100% - 6px); /* Limita a largura da imagem */
+            height: auto; /* Mantém a proporção da imagem */
+            border: solid 3px #770000; /* Adiciona borda */
+            box-sizing: border-box; /* Inclui borda e padding na largura */
+            margin-bottom: 10px; /* Espaço entre a imagem e o texto */
+        }
+        }
+
+        @media (max-width: 756px) {
+        /* Três imagens por faixa na horizontal (modo retrato de tablet) */
+        .personagem li {
+            display: inline-block; /* Mostra três imagens por linha */
+            width: 33.33%; /* Define a largura para ocupar 1/3 da tela */
+            box-sizing: border-box; /* Inclui borda e padding na largura */
+            margin-bottom: 20px
+            ; /* Espaço entre as imagens */
+        }
+        .personagem li:nth-child(1) img,
+        .personagem li:nth-child(2) img {
+        max-width: 100%; /* Largura máxima igual à largura do container */
+        height: auto; /* Mantém a proporção da imagem */
+        }
+        .personagem img:hover {
+        width: 45vw !important; /* Largura de 45vw no modo paisagem */
+        height: auto !important; /* Mantém a proporção da imagem */
+        max-width: 85vw !important; /* Largura máxima de 85vw no modo retrato */
+        z-index: 1; /* Posiciona a imagem na frente das outras */
+        position: relative; /* Permite posicionamento relativo */
+        cursor: pointer; /* Exibe o cursor como mão ao passar o mouse */
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Sombra para destacar a imagem */
+        }
+        }
+
+        @media (min-width: 757px) and (max-width: 1200px) {
+        /* Quatro imagens por faixa na horizontal (telas entre 757px e 1200px) */
+        .personagem li {
+            display: inline-block; /* Mostra quatro imagens por linha */
+            width: 25%; /* Define a largura para ocupar 1/4 da tela */
+            box-sizing: border-box; /* Inclui borda e padding na largura */
+            margin-bottom: 20px; /* Espaço entre as imagens */
+        }
+        }
+
+        @media (min-width: 1201px) {
+        /* Quatro imagens por faixa na horizontal (telas maiores que 1200px) */
+        .personagem li {
+            display: inline-block; /* Mostra quatro imagens por linha */
+            width: 25%; /* Define a largura para ocupar 1/4 da tela */
+            box-sizing: border-box; /* Inclui borda e padding na largura */
+            margin-bottom: 20px; /* Espaço entre as imagens */
+        }
+        }
+
+        /* Estilos para aumentar a imagem ao clicar */
+
+            /* Estilos para corrigir desalinhamento */
+        nav ul li {
+        display: inline-flex; /* Permite alinhar verticalmente */
+        align-items: center; /* Alinha verticalmente no centro */
+        margin-right: 10px; /* Espaço entre os itens */
+        }
+
+        nav ul li a {
+        display: flex; /* Permite alinhar horizontalmente */
+        align-items: center; /* Alinha verticalmente no centro */
+        }
+
+        nav ul li i {
+        margin-right: 5px; /* Espaço entre o ícone e o texto */
+        }
+
+        /* Estilos para conter as duas primeiras imagens */
+        .personagem li:nth-child(1),
+        .personagem li:nth-child(2) {
+        overflow: hidden; /* Esconde o conteúdo que excede a área */
+        }
+
+
+        /* Estilos para imagens */
+    .personagem img {
+    max-width: 100%; /* Largura máxima igual à largura do container */
+    height: auto; /* Mantém a proporção da imagem */
+    display: block; /* Exibe a imagem como bloco */
+    margin-bottom: 20px; /* Espaço entre as imagens */
+    }
+
+    /* Ocultando imagens em dispositivos pequenos */
+    @media (max-width: 556px) {
+        .personagem li:nth-child(1) img,
+        .personagem li:nth-child(2) img {
+        max-width: 100%; /* Largura máxima igual à largura do container */
+        height: auto; /* Mantém a proporção da imagem */
+        }
+        .personagem img:hover {
+        width: 45vw !important; /* Largura de 45vw no modo paisagem */
+        height: auto !important; /* Mantém a proporção da imagem */
+        max-width: 85vw !important; /* Largura máxima de 85vw no modo retrato */
+        z-index: 1; /* Posiciona a imagem na frente das outras */
+        position: relative; /* Permite posicionamento relativo */
+        cursor: pointer; /* Exibe o cursor como mão ao passar o mouse */
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Sombra para destacar a imagem */
+        }
+    .imagemConteudo {
+        display: none; /* Oculta as imagens */
+    }
+    }
+
+    .painel-lateral {
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            width: 250px;
+            background-color: #09111f;
+            color: #D90429;
+            overflow-y: auto;
+            transition: transform 0.3s ease;
+            z-index: 999; /* Garante que os painéis estejam na frente de outros elementos */
+        }
+
+        .painel-lateral h2 {
+            text-align: center;
+            margin-top: 20px;
+            cursor: pointer;
+            color: #fff; /* Ajusta a cor do texto do título */
+        }
+
+        .painel-lateral ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        .painel-lateral li {
+            margin-bottom: 10px;
+            padding: 5px;
+            border-bottom: 1px solid #D90429;
+            cursor: pointer;
+        }
+
+        .painel-lateral li:last-child {
+            border-bottom: none;
+        }
+
+        .painel-lateral .sugestao {
+            font-style: italic;
+            color: #777;
+        }
+
+        .painel-lateral.escondido {
+            transform: translateX(-100%);
+        }
+
+        /* Estilos específicos para cada painel */
+        #amigos-panel {
+            left: 0;
+        }
+
+        #comunidades-panel {
+            right: 0;
+        }
+
+        #mensagens-panel {
+            right: -250px; /* Coloca o painel fora da tela inicialmente */
+            width: 250px;
+            padding: 20px; /* Adiciona espaçamento interno */
+        }
+
+        #mensagens-panel h2 {
+            color: #D90429; /* Ajusta a cor do título */
+        }
+
+        #mensagens-panel ul {
+            margin-top: 20px; /* Adiciona espaçamento superior */
+        }
+
+        #mensagens-panel .escrever-mensagem {
+            text-align: center;
+            margin-top: 20px; /* Adiciona espaçamento superior */
+        }
+
+        #mensagens-panel .escrever-mensagem button {
+            background-color: #D90429;
+            color: #fff;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+
+        #mensagens-panel.escondido {
+            transform: translateX(0); /* Mostra o painel quando não está escondido */
+        }
+
+        .painel-lateral {
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            width: 250px;
+            background-color: #09111f;
+            color: #D90429;
+            overflow-y: auto;
+            transition: transform 0.3s ease;
+            z-index: 999; /* Garante que os painéis estejam na frente de outros elementos */
+        }
+
+        .painel-lateral h2 {
+            text-align: center;
+            margin-top: 20px;
+            cursor: pointer;
+            color: #fff; /* Ajusta a cor do texto do título */
+        }
+
+        .painel-lateral ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        .painel-lateral li {
+            margin-bottom: 10px;
+            padding: 5px;
+            border-bottom: 1px solid #D90429;
+            cursor: pointer;
+        }
+
+        .painel-lateral li:last-child {
+            border-bottom: none;
+        }
+
+        .painel-lateral .sugestao {
+            font-style: italic;
+            color: #777;
+        }
+
+        .painel-lateral.escondido {
+            transform: translateX(-100%);
+        }
+
+        /* Estilos específicos para cada painel */
+        #amigos-panel {
+            left: 0;
+        }
+
+        #comunidades-panel {
+            right: 0;
+        }
+
+        #mensagens-panel {
+            right: -250px; /* Posiciona o painel fora da tela */
+            width: 250px;
+            padding: 20px; /* Adiciona espaçamento interno */
+        }
+
+        #mensagens-panel h2 {
+            color: #D90429; /* Ajusta a cor do título */
+        }
+
+        #mensagens-panel ul {
+            margin-top: 20px; /* Adiciona espaçamento superior */
+            padding-left: 0; /* Remove o padding padrão */
+        }
+
+        #mensagens-panel .escrever-mensagem {
+            text-align: center;
+            margin-top: 20px; /* Adiciona espaçamento superior */
+        }
+
+        #mensagens-panel .escrever-mensagem button {
+            background-color: #D90429;
+            color: #fff;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+
+        #mensagens-panel.escondido {
+            right: 0; /* Mostra o painel quando não está escondido */
+        }
+        
+        #mensagens-panel {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 250px;
+            height: 100%;
+            background-color: #09111f;
+            color: #D90429;
+            overflow-y: auto;
+            transition: transform 0.3s ease;
+            z-index: 999;
+            transform: translateX(100%); /* Inicialmente escondido */
+            padding: 20px;
+        }
+
+        #mensagens-panel h2 {
+            text-align: center;
+            color: #D90429;
+            cursor: pointer;
+        }
+
+        #mensagens-panel ul {
+            list-style-type: none;
+            padding-left: 0;
+            margin-top: 20px;
+        }
+
+        #mensagens-panel li {
+            margin-bottom: 10px;
+            padding: 5px;
+            border-bottom: 1px solid #D90429;
+            cursor: pointer;
+        }
+
+        #mensagens-panel li:last-child {
+            border-bottom: none;
+        }
+
+        #mensagens-panel .escrever-mensagem {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        #mensagens-panel .escrever-mensagem button {
+            background-color: #D90429;
+            color: #fff;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+
+        /* Estilos para o ícone de envelope */
+        .fa-envelope {
+            cursor: pointer;
+        }
+
+        @media (max-width: 556px) {
+        .personagem img {
+            position: relative; /* Adicione essa linha para garantir que o z-index funcione */
+            z-index: 1; /* Adicione essa linha para garantir que todas as imagens tenham uma ordem de sobreposição definida */
+            max-width: 100%; /* Largura máxima igual à largura do container */
+            height: auto; /* Mantém a proporção da imagem */
+            display: block; /* Exibe a imagem como bloco */
+            margin-bottom: 20px; /* Espaço entre as imagens */
+        }
+}
+
+        </style>
+
+        <script src="https://kit.fontawesome.com/974b9b55a2.js" crossorigin="anonymous">
+        </script>
+    </head>
+    <body>
+        <header>
+            <h1>Webby Souls</h1>
+            <hr class="barraVermelha">
+            <nav>
+                <ul>
+                    <li><a href="socialmedia.html" title="Início"><i class="fa-solid fa-house icone"></i></a></li>
+                    <li><a href="eu.jpg" title="Meu Perfil"><i class="fa-solid fa-user icone"></i></a></li>
+                    <li><a href="eles.jpg" title="Amigos"><i class="fa-solid fa-user-group icone"></i></a></li>
+                    <li><a href="#" id="mensagens-icon" title="Mensagens"><i class="fa-solid fa-envelope icone"></i></a></li>
+                </ul>
+            </nav>
+        </header>
+        <main>
+            <section>
+                <h2>Posts Recentes</h2>
+                <article>
+                    <h3>Chainsaw Man - The Movie: Reze Arc</h3>
+                    <img src="denjireze.jpg" height="300px" width="500px" class="imagemConteudo">
+                    <p class="textoConteudo">
+                        Quase um ano após a exibição do último episódio da primeira temporada, 
+                        os fãs de Chainsaw Man receberam uma novidade bem animadora durante a 
+                        Jump Festa 2024. O arco posterior ao confronto entre Denji e Katana Man será 
+                        adaptado em filme pelo MAPPA Studio e contará com a estreia de Reze, 
+                        personagem amada pelos fãs do mangá de Tatsuki Fujimoto.
+                    </p>
+                </article>
+
+                <article>
+                    <h3>Postagem 2</h3>
+                    <img src="LookBack.jpg" height="300px" width="500px" class="imagemConteudo">
+                    <p class="textoConteudo">
+                        Se você é fã de Chainsaw Man e Fire Punch, temos uma ótima notícia para você: o one-shot 
+                        Look Back, de Tatsuki Fujimoto, vai virar um filme de anime! Isso mesmo, a obra que foi 
+                        publicada na revista Shonen Jump+ em julho de 2021 vai ganhar uma adaptação animada que 
+                        promete emocionar os fãs. O filme será produzido pelo estúdio Mappa, o mesmo de Jujutsu Kaisen e 
+                        Attack on Titan: The Final Season.
+                    </p>
+                </article>
+            </section>
+            <section>
+                <h2>Personagens</h2>
+                <ul class="personagem">
+                    <li>
+                        <a href="https://chainsaw-man.fandom.com/pt-br/wiki/Denji" title="Denji" target="_blank">
+                            <img src="Denji.jpg" alt="Denji Sorrindo" width="165px" height="165px">
+                            <p>Denji (Chainsaw man)</p>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="https://chainsaw-man.fandom.com/pt-br/wiki/Asa_Mitaka" target="_blank" title="Asa Mitaka">
+                            <img src="Asa Mitaka.jpg" alt="Asa Mitaka Loser" width="165px" height="165px">
+                            <p>Asa Mitaka (Yoru)</p>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="https://chainsaw-man.fandom.com/pt-br/wiki/Hirofumi_Yoshida" title="Yoshida" target="_blank">
+                            <img src="Yoshida.jpg" alt="Yoshida Posando" width="165px" height="165px"></img>
+                            <p>Yoshida</p>
+                        </a>
+                    </li>
+                </ul>
+            </section>
+            <section>
+                <div id="mensagens-panel" class="painel-lateral">
+                    <h2>Mensagens</h2>
+                    <ul>
+                        <li>Mensagem 1</li>
+                        <li>Mensagem 2</li>
+                        <li>Mensagem 3</li>
+                        <!-- Adicione mais mensagens conforme necessário -->
+                    </ul>
+                    <div class="escrever-mensagem">
+                        <button>Escrever nova mensagem</button>
+                    </div>
+                </div>             
+            </section>
+        </main>
+        <footer>
+            <p>&copy; 2023 Webby Souls. Todos os direitos reservados.</p>
+        </footer>
+
+        <script>
+           document.getElementById('mensagens-icon').addEventListener('click', function() {
+                const panel = document.getElementById('mensagens-panel');
+                const isHidden = panel.classList.contains('escondido');
+                if (!isHidden) {
+                    panel.classList.add('escondido');
+                } else {
+                    panel.classList.remove('escondido');
+                }
+            })  ;
+        </script>
+    </body>
+    </html>

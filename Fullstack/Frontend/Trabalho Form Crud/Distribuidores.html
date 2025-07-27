@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Distribuidoras</title>
+    <link rel="stylesheet" href="estilo.css">
+</head>
+<body>
+    <header>
+        <h1>Registro de Distribuidoras</h1>
+      </header>
+    
+      <nav>
+      </nav>
+      <main>
+        <hr>
+        <div class="distancia">
+          <div class="Cadastro">
+                <form>
+                    <p class="textocad"><label>Nome: <input type="text" id="nome" name="nome" placeholder="Digite o nome da distribuidora" required></label></p>
+                    <p class="textocad"><label>CNPJ: <input type="text" id="cnpj" name="cnpj" pattern="\d{2}\.\d{3}\.\d{3}\/\d{4}-\d{2}" placeholder="Ex: 12.345.678/0001-90" required></label></p>
+                    <p class="textocad"><label>Responsável: <input type="text" id="responsavel" name="responsavel" placeholder="Digite o nome do responsável pela distribuidora" required></label></p>
+                    <p class="textocad"><label>E-mail: <input type="email" id="email" name="email" placeholder="Digite o e-mail de contato" required></label></p>
+                    <p class="textocad"><label>Telefone: <input type="tel" id="telefone" name="telefone" pattern="\([0-9]{2}\) [0-9]{5}-[0-9]{4}" placeholder="(99) 12345-6789" required></label></p>
+                    <p class="textocad"><label>Endereço: <input type="text" id="endereco" name="endereco" placeholder="Digite o endereço completo da distribuidora" required></label></p>
+                    
+                    <p><button type="submit">Registrar Distribuidora</button></p>
+                </form>
+            </div>
+        </div>
+</body>
+</html>

@@ -1,0 +1,15 @@
+<script>
+  let salarioini = Number(prompt("Por favor, nos informe o valor do seu salário: "));
+  let aumentoporcent = Number(prompt("Digite o número da porcentagem de aumento do salário: "));
+  let salariofinal = salarioini + ((salarioini / 100) * aumentoporcent); 
+
+  let msgsalariofinal = "O valor do seu salário após o aumento de: " + aumentoporcent + "% é de: " + salariofinal +  "R$";
+
+  console.log("O salário inicial é de: " + salarioini + "R$");
+  console.log("O valor da % de aumento é de: " + aumentoporcent + "%");
+  console.log("O valor do seu salário após o aumento de: " + aumentoporcent + "% é de: " ,salariofinal +  "R$");
+
+  alert("O salário inicial é de: " + salarioini + "R$");
+  alert("O valor da % de aumento é de: " + aumentoporcent + "%");
+  alert(msgsalariofinal);
+</script>
